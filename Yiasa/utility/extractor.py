@@ -6,11 +6,17 @@ class Urls:
         self.urls = set()
         self.emails = set()
     
-    def add_emails(emails):
-        self.emails.add(emails)
+    def add_emails(self, emails):
+        if type(emails) == set:
+            self.emails = self.emails.union(emails)
+        elif type(emails) == str:
+            self.emails.add(emails)
     
-    def add_urls(urls):
-        self.urls.add(urls)
+    def add_urls(self, urls):
+        if type(urls) == set:
+            self.urls = self.urls.union(urls)
+        elif type(urls) == str:
+            self.urls.add(urls)
 
     def __str__(self):
         return f'urls: {len(self.urls)}, emails: {len(self.emails)}'
