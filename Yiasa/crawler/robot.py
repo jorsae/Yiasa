@@ -1,3 +1,5 @@
+import re
+
 class Robots:
     def __init__(self):
         self.rules = {'Allow':[], 'Disallow':[]}
@@ -16,7 +18,23 @@ class Robots:
 
             if line.startswith('disallow'):
                 disallow = line.split(': ')[1].split(' ')[0]
-                self.rules['Disallow'].append(disallow)
+                self.rules['Disallow'].append(self.clean_regex(disallow))
             elif line.startswith('allow'):
                 allow = line.split(': ')[1].split(' ')[0]
-                self.rules['Allow'].append(allow)
+                self.rules['Allow'].append(self.clean_regex(allow))
+    
+    def clean_regex(self, rule):
+        rule = rule.replace('.', '\.')
+        rule = rule.replace('^', '\^')
+        rule = rule.replace('$', '\$')
+        rule = rule.replace('+', '\+')
+        rule = rule.replace('?', '\?')
+        rule = rule.replace('*', '\S+')
+        return rule
+
+    def can_crawl_url(self, url):
+        for disallow in self.rules['Disallow']:
+            if re.search(disallow, url, re.IGNORECASE):
+                print(disallow)
+                return False
+        return True
