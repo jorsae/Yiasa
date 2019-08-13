@@ -2,11 +2,8 @@ import requests
 
 def get_request(url, timeout=3):
     try:
-        req = requests.get(url, timeout=timeout)
-        return req
+        return requests.get(url, timeout=timeout)
     except requests.exceptions.Timeout as timeout:
-        # TODO: log
-        return None
+        raise requests.exceptions.Timeout(f'{url} timed out')
     except Exception as e:
-        # TODO: log
-        return None
+        raise Exception(e)

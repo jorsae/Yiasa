@@ -4,5 +4,6 @@ sys.path.append('utility/')
 import crawler
 import utility
 
-crawler = crawler.Crawler()
-print(crawler.creation_time)
+fld = utility.get_fld("https://github.com/jorsae/YiasaCrawler/blob/master/bot/spider.py")
+crawler = crawler.Crawler(fld)
+print(crawler)
