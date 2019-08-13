@@ -10,7 +10,7 @@ testdata_test_get_fld = [
     ("https://stackoverflow.com/questions/9626535/get-protocol-host-name-from-url", "stackoverflow.com"),
     ("", "")
 ]
-@pytest.mark.parametrize("url,expected", testdata_test_get_fld)
+@pytest.mark.parametrize("url, expected", testdata_test_get_fld)
 def test_get_fld(url, expected):
     fld = utility.get_fld(url)
     assert(fld) == expected
