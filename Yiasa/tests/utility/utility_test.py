@@ -11,5 +11,5 @@ testdata_test_get_fld = [
 ]
 @pytest.mark.parametrize("url,expected", testdata_test_get_fld)
 def test_get_fld(url, expected):
-    a = utility.get_fld(url)
-    assert(a) == expected
+    fld = utility.get_fld(url)
+    assert(fld) == expected
