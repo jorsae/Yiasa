@@ -18,6 +18,7 @@ except requests.exceptions.Timeout as e:
 
 
 req = request.get_request('http://vg.no/robots.txt')
+req = request.get_request('https://www.reddit.com/robots.txt')
 robots = robot.Robots()
 robots.parse_robots(req.text)
 print(robots.rules)
