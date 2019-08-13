@@ -18,7 +18,8 @@ class Crawler:
         url = f'{globvar.scheme}{self.fld}/robots.txt'
         try:
             req = request.get_request(url)
-            self.robots.parse_robots(req.text)
+            if req.status_code != 404:
+                self.robots.parse_robots(req.text)
         except:
             pass
 
