@@ -14,6 +14,10 @@ class Crawler:
         self.id = uuid.uuid4().hex
         self.robots = robot.Robots()
     
+    def start_crawling(self):
+        self.parse_robots()
+        print(self.robots)
+
     def parse_robots(self):
         url = f'{globvar.scheme}{self.fld}/robots.txt'
         try:
@@ -21,6 +25,7 @@ class Crawler:
             if req.status_code != 404:
                 self.robots.parse_robots(req.text)
         except:
+            # TODO: log error
             pass
 
     def __str__(self):
