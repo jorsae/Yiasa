@@ -18,17 +18,15 @@ class Database():
     def __init__(self):
         self.connection = sqlite3.connect('test.sql', check_same_thread=False)
         self.connection.isolation_level = None
-        self.cursor = None
 
     def start_transaction(self):
-        self.cursor = self.connection.cursor()
-        self.cursor.execute('BEGIN')
+        self.connection.execute('BEGIN')
     
     def end_transaction(self):
-        self.cursor.execute('END')
+        self.connection.execute('END')
     
     def query(self, query):
-        self.cursor.execute(query)
+        self.connection.execute(query)
 
     def cursor_query(self, query):
         cursor = self.connection.cursor()
@@ -36,23 +34,12 @@ class Database():
         for row in cursor:
             print(row)
 
+"""
 throw = Database()
 throw.start_transaction()
 throw.query("DROP TABLE IF EXISTS test")
 throw.query("CREATE TABLE test (i integer)")
 throw.end_transaction()
-
+"""
 db = Database()
-db2 = Database()
-
-db.start_transaction()
-for _ in range(3):
-    db.query(f'INSERT INTO test VALUES({_})')
-
-db2.start_transaction()
-for _ in range(2):
-    db2.query(f'INSERT INTO test VALUES({_})')
-db2.end_transaction()
-db.end_transaction()
-
-db.cursor_query("SELECT * from test")
+db.cursor_query("SELECT * FROM test")
