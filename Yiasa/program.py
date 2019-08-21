@@ -8,8 +8,12 @@ import robot
 import utility
 import request
 import extractor
+import logging
+
+utility.setup_logging()
 
 print('program.py')
+logging.info('asd')
 
 url = 'asdasdasdasd.com'
 fld = utility.get_fld(url)
