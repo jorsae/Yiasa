@@ -19,9 +19,12 @@ Read more regarding journal_mode here:
 
 class Database():
     def __init__(self):
-        self.connection = sqlite3.connect('test.sql', check_same_thread=False, isolation_level=None)
-        self.connection.execute('pragma journal_mode=DELETE')
-        self.connection.execute('pragma journal_mode=WAL')
+        self.connection = sqlite3.connect('test.sql', check_same_thread=False)
+        self.query("DROP TABLE IF EXISTS test")
+        self.query("CREATE TABLE test(i integer)")
+        print('database created')
+        #self.connection.execute('pragma journal_mode=DELETE')
+        #self.connection.execute('pragma journal_mode=WAL')
 
     def start_transaction(self):
         self.connection.execute('BEGIN')
