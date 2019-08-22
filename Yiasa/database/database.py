@@ -1,5 +1,4 @@
 import sqlite3
-import threading
 
 """
 Example below does not work.
@@ -22,7 +21,7 @@ class Database():
         self.connection = sqlite3.connect('test.sql', check_same_thread=False)
         self.query("DROP TABLE IF EXISTS test")
         self.query("CREATE TABLE test(i integer)")
-        print('database created')
+        logging.info('Database created')
         self.connection.execute('pragma journal_mode=DELETE')
         #self.connection.execute('pragma journal_mode=WAL')
 
@@ -41,10 +40,3 @@ class Database():
         cursor.execute(query)
         for row in cursor:
             print(row)
-
-#throw = Database()
-#throw.query("DROP TABLE IF EXISTS test")
-#throw.query("CREATE TABLE test (i integer)")
-
-#db = Database()
-#db.cursor_query("SELECT * FROM test")
