@@ -3,7 +3,7 @@ import queue
 import random
 import time
 import database
-from PoolQuery import PoolQuery
+from pq import PoolQuery
 
 class Pool(queue.PriorityQueue):
     def __init__(self):
@@ -44,6 +44,7 @@ def fill():
     for _ in range(random.randint(1, 4)):
         a.put(PoolQuery(1, 'a'))
 
+"""
 a = Pool()
 a.put(PoolQuery(-1, 'DROP TABLE IF EXISTS test'))
 a.put(PoolQuery(-1, 'CREATE TABLE test (i integer)'))
@@ -66,3 +67,4 @@ while True:
         fill()
 
 a.database.cursor_query("SELECT COUNT(*) FROM test")
+"""
