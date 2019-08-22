@@ -1,4 +1,5 @@
 import sqlite3
+import threading
 
 """
 Example below does not work.
@@ -12,12 +13,15 @@ Lots of people say sqlite does not support multiple connections properly.
 Best solution is probably to have a Pool.
     https://twistedmatrix.com/trac/
 
+Read more regarding journal_mode here:
+    https://www.sqlite.org/pragma.html#pragma_journal_mode
 """
 
 class Database():
     def __init__(self):
-        self.connection = sqlite3.connect('test.sql', check_same_thread=False)
-        self.connection.isolation_level = None
+        self.connection = sqlite3.connect('test.sql', check_same_thread=False, isolation_level=None)
+        self.connection.execute('pragma journal_mode=DELETE')
+        self.connection.execute('pragma journal_mode=WAL')
 
     def start_transaction(self):
         self.connection.execute('BEGIN')
@@ -27,6 +31,7 @@ class Database():
     
     def query(self, query):
         self.connection.execute(query)
+        self.connection.commit()
 
     def cursor_query(self, query):
         cursor = self.connection.cursor()
@@ -34,12 +39,9 @@ class Database():
         for row in cursor:
             print(row)
 
-"""
-throw = Database()
-throw.start_transaction()
-throw.query("DROP TABLE IF EXISTS test")
-throw.query("CREATE TABLE test (i integer)")
-throw.end_transaction()
-"""
-db = Database()
-db.cursor_query("SELECT * FROM test")
+#throw = Database()
+#throw.query("DROP TABLE IF EXISTS test")
+#throw.query("CREATE TABLE test (i integer)")
+
+#db = Database()
+#db.cursor_query("SELECT * FROM test")

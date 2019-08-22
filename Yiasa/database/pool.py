@@ -1,38 +1,70 @@
-from multiprocessing import Process
+from multiprocessing import Process, Queue, current_process
+import multiprocessing
+import database
 import random
 import time
 import sqlite3
+import datetime
+import threading
+import uuid
 
-connection = sqlite3.connect('test.sql')
+db = database.Database()
+lock = threading.Lock()
 
-def query(query, sleep=True):
-    connection.execute(query)
-    connection.commit()
-    if sleep:
-        time.sleep(random.random())
+class Pool():
+    def __init__(self):
+        self.database = database.Database()
+        self.processes = []
+        self.lock = threading.Lock()
+    
+    def start_process_queue(self, queue):
+        print('start_process_queue')
+        p = Process(target=process_queue, args=(queue,), name=uuid.uuid4().hex)
+        print('start_process_queue2')
+        self.processes.append(p)
+        print('start_process_queue3')
+        p.start()
+        print('start_process_queue4')
 
-def cursor_query():
-    cursor = connection.cursor()
-    cursor.execute("SELECT COUNT(*) FROM test")
-    print(cursor.fetchone())
+def process_queue(queue):
+    global db, lock
+    for item in iter(queue.get, None):
+        q = f'INSERT INTO test VALUES ({item})'
+        lock.acquire()
+        try:
+            #print(multiprocessing.current_process().name)
+            db.query(q)
+        finally:
+            lock.release()
+
+def add_queue(queue, num1, num2):
+    for i in range(num1, num2):
+        queue.put(i)
+    return queue
 
 def main():
-    query("DROP TABLE IF EXISTS test", sleep=False)
-    query("CREATE TABLE test (i integer)", sleep=False)
+    pool = Pool()
 
-    #db = database.Database()
-    procs = []
+    q1 = Queue()
+    q1 = add_queue(q1, 1000, 2000)
+    q2 = Queue()
+    q2 = add_queue(q2, 2000, 3000)
+    q3 = Queue()
+    q3 = add_queue(q3, 2000, 3000)
+
+    pool.start_process_queue(q1)
+    pool.start_process_queue(q2)
+    pool.start_process_queue(q3)
     while True:
-        q = f'INSERT INTO test VALUES ({random.randint(1, 1e4)})'
-        p1 = Process(target=query, args=(q, ))
-        procs.append(p1)
-        p1.start()
-        time.sleep(random.random()* 2)
-        for proc in procs:
+        pool.database.cursor_query("SELECT MAX(i) FROM test")
+        print(len(pool.processes))
+        time.sleep(0.4)
+        for proc in pool.processes:
             if proc.is_alive() is False:
                 proc.join()
-                procs.remove(proc)
-        print(f'{cursor_query()} | {len(procs)}')
+                pool.processes.remove(proc)
+                print('stopped proc')
+    
 
 if __name__ == '__main__':
     main()
