@@ -29,3 +29,9 @@ def test_query_get(create_table):
     db.query(f'INSERT INTO test VALUES ({number})')
     result = db.query_get(f'SELECT * FROM test where i = \'{number}\'')
     assert(result[0][0]) == number
+
+def test_query_get_fails(create_table):
+    number = random.randint(1, 1e5)
+    db.query(f'INSERT INTO test VALU ({number})')
+    result = db.query_get(f'SELECT * FROM test where i = \'{number}\'')
+    assert(result) == []
