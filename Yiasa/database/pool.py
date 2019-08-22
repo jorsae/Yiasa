@@ -11,11 +11,17 @@ class Pool(queue.PriorityQueue):
         self.thread = None
         self.processing = False
         self.database = database.Database()
+        print('init db')
     
     def put(self, item):
         queue.PriorityQueue.put(self, item)
         self.start_process()
     
+    def get(self):
+        if self.empty():
+            return None
+        return queue.PriorityQueue.get(self)
+
     def start_process(self):
         if queue.PriorityQueue.empty(self):
             self.thread.join()
@@ -45,7 +51,6 @@ def fill():
         a.put(PoolQuery(1, 'a'))
 
 """
-a = Pool()
 a.put(PoolQuery(-1, 'DROP TABLE IF EXISTS test'))
 a.put(PoolQuery(-1, 'CREATE TABLE test (i integer)'))
 a.put(PoolQuery(100, 'INSERT INTO test VALUES(1)'))
