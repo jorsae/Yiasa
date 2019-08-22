@@ -23,7 +23,7 @@ class Database():
         self.query("DROP TABLE IF EXISTS test")
         self.query("CREATE TABLE test(i integer)")
         print('database created')
-        #self.connection.execute('pragma journal_mode=DELETE')
+        self.connection.execute('pragma journal_mode=DELETE')
         #self.connection.execute('pragma journal_mode=WAL')
 
     def start_transaction(self):

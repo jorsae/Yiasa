@@ -32,7 +32,7 @@ class Pool(queue.PriorityQueue):
         self.processing = True
         while not queue.PriorityQueue.empty(self):
             poolQuery = queue.PriorityQueue.get(self)
-            print(f'Processing: {poolQuery}')
+            #print(f'Processing: {poolQuery}')
             self.database.query(poolQuery.query)
         self.processing = False
         print(f'queue empty: {queue.PriorityQueue.empty(self)}')
@@ -47,14 +47,22 @@ def fill():
 a = Pool()
 a.put(PoolQuery(-1, 'DROP TABLE IF EXISTS test'))
 a.put(PoolQuery(-1, 'CREATE TABLE test (i integer)'))
-a.put(PoolQuery(-1, 'INSERT INTO test VALUES(1)'))
-a.put(PoolQuery(-1, 'INSERT INTO test VALUES(2)'))
-a.put(PoolQuery(-1, 'INSERT INTO test VALUES(3)'))
+a.put(PoolQuery(100, 'INSERT INTO test VALUES(1)'))
+a.put(PoolQuery(100, 'INSERT INTO test VALUES(2)'))
+a.put(PoolQuery(100, 'INSERT INTO test VALUES(3)'))
 
 time.sleep(2)
 
+def fill():
+    for _ in range(400):
+        a.put(PoolQuery(100, 'INSERT INTO test VALUES(1)'))
+
+iterations = 0
 while True:
     a.database.cursor_query("SELECT COUNT(*) FROM test")
+    time.sleep(1)
     if a.empty():
-        time.sleep(random.random())
-        a.put(PoolQuery(-1, 'INSERT INTO test VALUES(1)'))
+        iterations += 1
+        fill()
+
+a.database.cursor_query("SELECT COUNT(*) FROM test")
