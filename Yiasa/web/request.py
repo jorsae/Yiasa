@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 
-class RequestResult():
+class RequestResult(object):
     def __init__(self, url, text, elapsed_time, status_code, date, content_type, content_length):
         self.FLD_Id = None
         self.URLS_Id = None
@@ -14,14 +14,10 @@ class RequestResult():
         self.content_length = content_length
     
     @classmethod
-    def by_request(self, request, date):
-        self.url = request.url
-        self.text = request.text
-        self.elapsed_time = request.elapsed
-        self.status_code = request.status_code
-        self.date = date
-        self.content_type = parse_headers(request.headers, 'Content-Length')
-        self.content_length = parse_headers(request.headers, 'Content-Type')
+    def by_request(cls, request, date):
+        contentType = parse_headers(request.headers, 'Content-Length')
+        contentLength = parse_headers(request.headers, 'Content-Type')
+        return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
 
     def __str__(self):
         return f'{self.url} {self.date} {self.elapsed_time} | {self.status_code} {self.content_type} {self.content_length}'
