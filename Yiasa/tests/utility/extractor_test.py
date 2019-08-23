@@ -9,7 +9,7 @@ import request
 import extractor
 
 testdata_test_extractor_urls = [
-    ('https://reddit.com', {'http://github.com/reddit/reddit/wiki/API'}, set()),
+    ('http://wikileaksorwhatever.com/', {'http://www.hbo.com/html/terms-of-use/index.html', 'http://www.hbo.com/html/privacy-policy/index.html'}, set()),
 ]
 
 @pytest.mark.parametrize("url, expected_urls, expected_emails", testdata_test_extractor_urls)

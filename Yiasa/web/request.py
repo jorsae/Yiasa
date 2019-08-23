@@ -2,16 +2,27 @@ import requests
 from datetime import datetime
 
 class RequestResult():
-    def __init__(self, url, elapsed_time, status_code, date, content_type, content_length):
+    def __init__(self, url, text, elapsed_time, status_code, date, content_type, content_length):
         self.FLD_Id = None
         self.URLS_Id = None
         self.url = url
+        self.text = text
         self.elapsed_time = elapsed_time
         self.status_code = status_code
         self.date = date
         self.content_type = content_type
         self.content_length = content_length
     
+    @classmethod
+    def by_request(self, request, date):
+        self.url = request.url
+        self.text = request.text
+        self.elapsed_time = request.elapsed
+        self.status_code = request.status_code
+        self.date = date
+        self.content_type = parse_headers(request.headers, 'Content-Length')
+        self.content_length = parse_headers(request.headers, 'Content-Type')
+
     def __str__(self):
         return f'{self.url} {self.date} {self.elapsed_time} | {self.status_code} {self.content_type} {self.content_length}'
 
@@ -25,7 +36,7 @@ def get_request(url, timeout=3, redirects=False):
     
     contentType = parse_headers(request.headers, 'Content-Type')
     contentLength = parse_headers(request.headers, 'Content-Length')
-    return RequestResult(request.url, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
+    return RequestResult(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
 
 def parse_headers(headers, value):
     try:
