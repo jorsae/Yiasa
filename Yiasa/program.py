@@ -10,13 +10,14 @@ import request
 import extractor
 import logging
 
-utility.setup_logging()
 
-print('program.py')
-logging.info('asd')
-
-url = 'reddit.com'
-fld = utility.get_fld(url)
-spider = crawler.Crawler(fld)
-spider.start_crawling()
-print(crawler)
+def main():
+    utility.setup_logging()
+    url = 'reddit.com'
+    fld = utility.get_fld(url)
+    spider = crawler.Crawler(fld)
+    spider.start_crawling()
+    print(crawler)
+    
+if __name__ == '__main__':
+    main()
