@@ -3,7 +3,7 @@ import globvar
 
 def setup_logging():
     """ Sets up logging """
-    logging.basicConfig(filename=f'{globvar.log_folder}/{globvar.log_file}', level=logging.DEBUG, format='%(asctime)s %(levelname)s:%(name)s %(message)s')
+    logging.basicConfig(filename=f'{globvar.log_folder}/{globvar.log_file}', level=logging.DEBUG, format='%(asctime)s %(levelname)s:[%(filename)s:%(lineno)d] %(message)s')
 
 def get_fld(url):
     """ gets first level domain from a url """

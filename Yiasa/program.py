@@ -15,7 +15,7 @@ utility.setup_logging()
 print('program.py')
 logging.info('asd')
 
-url = 'asdasdasdasd.com'
+url = 'reddit.com'
 fld = utility.get_fld(url)
 spider = crawler.Crawler(fld)
 spider.start_crawling()
