@@ -10,13 +10,15 @@ import robot
 class Crawler:
     def __init__(self, fld):
         self.creation_date = datetime.now()
+        self.scheme = 'http://'
         self.fld = fld
         self.id = uuid.uuid4().hex
         self.robots = robot.Robots()
     
     def start_crawling(self):
         self.parse_robots()
-        print(self.robots)
+        result = request.get_request(f'{self.scheme}{self.fld}')
+        print(result)
 
     def parse_robots(self):
         url = f'{globvar.scheme}{self.fld}/robots.txt'
