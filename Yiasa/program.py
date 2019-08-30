@@ -13,7 +13,7 @@ import logging
 
 def main():
     utility.setup_logging()
-    url = 'reddit.com'
+    url = 'google.com'
     fld = utility.get_fld(url)
     spider = crawler.Crawler(fld)
     spider.start_crawling()

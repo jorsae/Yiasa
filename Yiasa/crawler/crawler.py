@@ -6,19 +6,26 @@ sys.path.append('utility/')
 import globvar
 import request
 import robot
+import extractor
 
 class Crawler:
     def __init__(self, fld):
         self.creation_date = datetime.now()
-        self.scheme = 'http://'
+        self.scheme = 'https://'
         self.fld = fld
         self.id = uuid.uuid4().hex
         self.robots = robot.Robots()
+        self.urls = extractor.Urls()
+        self.allow_redirects = True
     
     def start_crawling(self):
         self.parse_robots()
-        result = request.get_request(f'{self.scheme}{self.fld}')
+        result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
         print(result)
+        urls, emails = extractor.extract_urls(result.text, self.fld)
+        print(urls)
+        print(emails)
+        print(f'{len(urls)}{len(emails)}')
 
     def parse_robots(self):
         url = f'{globvar.scheme}{self.fld}/robots.txt'
