@@ -6,11 +6,11 @@ import database
 from pq import PoolQuery
 
 class Pool(queue.PriorityQueue):
-    def __init__(self):
+    def __init__(self, db_file='test.sql'):
         queue.PriorityQueue.__init__(self)
         self.thread = None
         self.processing = False
-        self.database = database.Database()
+        self.database = database.Database(db_file)
         print('init db')
     
     def put(self, item):

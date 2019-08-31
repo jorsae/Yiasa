@@ -1,5 +1,6 @@
 import sqlite3
 import logging
+import query
 
 """
 Example below does not work.
@@ -36,3 +37,12 @@ class Database():
         cursor = self.connection.cursor()
         cursor.execute(query)
         return cursor.fetchall()
+    
+    def setup_database(self):
+        self.query(query.create_table_fld())
+        self.query(query.create_table_crawl_history())
+        self.query(query.create_table_crawl_queue())
+        self.query(query.create_table_emails())
+        print('finished setup_database')
+        a = self.query("INSERT INTO FLD VALUES ('http', 1, 2019-02-01)")
+        print(a)
