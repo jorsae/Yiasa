@@ -19,6 +19,7 @@ class Crawler:
         self.allow_redirects = True
     
     def start_crawling(self):
+        logging.info(f'{self.id}: Starting crawling on {self.fld}')
         self.parse_robots()
         result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
         print(result)
@@ -28,6 +29,7 @@ class Crawler:
         print(f'{len(urls)}{len(emails)}')
 
     def parse_robots(self):
+        logging.info(f'{self.id}: Parsing robots.txt')
         url = f'{globvar.scheme}{self.fld}/robots.txt'
         try:
             req = request.get_request(url)
