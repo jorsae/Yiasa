@@ -1,8 +1,13 @@
 import logging
 import globvar
+import os
 
 def setup_logging():
     """ Sets up logging """
+    # Creates log folder
+    if not os.path.isdir(globvar.log_folder):
+        os.makedirs(globvar.log_folder)
+
     logging.basicConfig(filename=f'{globvar.log_folder}/{globvar.log_file}', level=logging.DEBUG, format='%(asctime)s %(levelname)s:[%(filename)s:%(lineno)d] %(message)s')
 
 def get_fld(url):
