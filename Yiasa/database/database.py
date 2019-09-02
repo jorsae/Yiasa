@@ -64,6 +64,7 @@ class Database():
             return None
 
     def setup_database(self):
+        logging.info('Tries to setup database')
         if self.setup_table(query.create_table_domain(), (query.TABLE_DOMAIN, )) is not True:
             return False
         if self.setup_table(query.create_table_crawl_history(), (query.TABLE_CRAWL_HISTORY, )) is not True:
