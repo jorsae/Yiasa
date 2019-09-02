@@ -24,18 +24,25 @@ class Database():
         self.connection.execute('pragma journal_mode=DELETE')
         #self.connection.execute('pragma journal_mode=WAL')
 
-    def query(self, query):
+    def query(self, query, param=None):
         try:
-            self.connection.execute(query)
+            if param is None:
+                self.connection.execute(query)
+            else:
+                self.connection.execute(query, param)
             self.connection.commit()
             return True
         except:
             # TODO: Logging
             return False
 
-    def query_get(self, query):
+    def query_get(self, query, param):
+        # TODO: Add exception handling
         cursor = self.connection.cursor()
-        cursor.execute(query)
+        if param is None:
+            cursor.execute(query)
+        else:
+            cursor.execute(query, param)
         return cursor.fetchall()
     
     def setup_database(self):

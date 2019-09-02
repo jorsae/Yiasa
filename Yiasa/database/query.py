@@ -1,3 +1,6 @@
+def table_exists():
+    return """ SELECT name from sqlite_master WHERE type='table' and name=? """
+
 def create_table_fld():
     return """ CREATE TABLE FLD (
                 scheme text,
