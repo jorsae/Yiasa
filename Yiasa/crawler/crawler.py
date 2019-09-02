@@ -1,6 +1,7 @@
 from datetime import datetime
 import uuid
 import sys
+import logging
 sys.path.append('web/')
 sys.path.append('utility/')
 import globvar
@@ -17,16 +18,26 @@ class Crawler:
         self.robots = robot.Robots()
         self.urls = extractor.Urls()
         self.allow_redirects = True
+        self.crawl_counter = 0
     
     def start_crawling(self):
-        logging.info(f'{self.id}: Starting crawling on {self.fld}')
+        logging.info(f'{self.id}: Starting crawling on {self.scheme}{self.fld}')
         self.parse_robots()
         result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
         print(result)
-        urls, emails = extractor.extract_urls(result.text, self.fld)
-        print(urls)
-        print(emails)
-        print(f'{len(urls)}{len(emails)}')
+        print(self.robots)
+        self.urls.extract_urls(result.text, self.fld)
+        self.crawl()
+    
+    def crawl(self):
+        while len(self.urls.urls) > 0:
+            url = self.urls.get_url()
+            logging.info(f'{self.id} | Crawling: {url}')
+            req = request.get_request(url, redirects=self.allow_redirects)
+            self.urls.extract_urls(req.text, self.fld)
+            self.crawl_counter += 1
+        logging.info(f'{self.id}: Finished crawling {self.fld} with: {self.crawl_counter} crawled urls!')
+            
 
     def parse_robots(self):
         logging.info(f'{self.id}: Parsing robots.txt')
@@ -36,8 +47,7 @@ class Crawler:
             if req.status_code != 404:
                 self.robots.parse_robots(req.text)
         except:
-            # TODO: log error
-            pass
+            logging.error(f'Something went wrong parsing robots.txt url: {url}')
 
     def __str__(self):
         return f'{self.id} | {self.fld}'

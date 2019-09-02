@@ -17,12 +17,12 @@ def main():
     utility.setup_logging()
     url = 'google.com'
     fld = utility.get_fld(url)
-    #spider = crawler.Crawler(fld)
-    #spider.start_crawling()
     print(crawler)
     p = pool.Pool('main.sql')
     setup_db = p.database.setup_database()
     print(setup_db)
+    spider = crawler.Crawler(fld)
+    spider.start_crawling()
     
 if __name__ == '__main__':
     main()

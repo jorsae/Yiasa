@@ -38,3 +38,6 @@ class Robots:
                 print(disallow)
                 return False
         return True
+    
+    def __str__(self):
+        return f'Allow: {self.rules["Allow"]}\nDisallow: {self.rules["Disallow"]}'
