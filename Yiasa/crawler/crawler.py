@@ -36,6 +36,7 @@ class Crawler:
             req = request.get_request(url, redirects=self.allow_redirects)
             self.urls.extract_urls(req.text, self.fld)
             self.crawl_counter += 1
+            print(f'crawled: {self.crawl_counter} | queue: {len(self.urls.urls)}')
         logging.info(f'{self.id}: Finished crawling {self.fld} with: {self.crawl_counter} crawled urls!')
             
 

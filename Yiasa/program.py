@@ -15,7 +15,7 @@ import pool
 
 def main():
     utility.setup_logging()
-    url = 'google.com'
+    url = 'jensenfilene.net'
     fld = utility.get_fld(url)
     print(crawler)
     p = pool.Pool('main.sql')

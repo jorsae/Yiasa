@@ -41,9 +41,11 @@ class Urls:
                 url = url if url.startswith('/') else f'/{url}'
                 url = f'{globvar.scheme}{fld}{url}'
                 if url not in self.crawled_urls:
+                    print(url)
                     self.add_urls(url)
             else:
                 if url not in self.crawled_urls:
+                    print(url)
                     self.add_urls(url)
     
     def __str__(self):
