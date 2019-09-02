@@ -38,3 +38,6 @@ def test_query_get_fails(create_table):
     db.query(f'INSERT INTO test VALU ({number})')
     result = db.query_get(f'SELECT * FROM test where i = \'{number}\'')
     assert(result) == []
+
+def test_setup_database():
+    assert(db.setup_database()) == True
