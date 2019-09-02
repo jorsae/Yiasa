@@ -39,13 +39,16 @@ class Database():
 
     def query_get(self, query, param=None):
         logging.info(f'{query} | {param}')
-        # TODO: Add exception handling
-        cursor = self.connection.cursor()
-        if param is None:
-            cursor.execute(query)
-        else:
-            cursor.execute(query, param)
-        return cursor.fetchall()
+        try:
+            cursor = self.connection.cursor()
+            if param is None:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, param)
+            return cursor.fetchall()
+        except Exception as e:
+            logging.error(f'query_get(): {e}')
+            return None
     
     def query_exists(self, query, param=None):
         logging.info(f'{query} | {param}')
