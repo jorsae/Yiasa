@@ -21,7 +21,8 @@ def main():
     #spider.start_crawling()
     print(crawler)
     p = pool.Pool('main.sql')
-    p.database.setup_database()
+    setup_db = p.database.setup_database()
+    print(setup_db)
     
 if __name__ == '__main__':
     main()
