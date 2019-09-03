@@ -22,6 +22,11 @@ def main():
     setup_db = p.database.setup_database()
     print(setup_db)
     spider = crawler.Crawler(fld)
+    spider.extractor.robots.rules["Disallow"].append("\S+/Partier/\S+")
+    spider.extractor.robots.rules["Disallow"].append("/\S+.html")
+    spider.extractor.robots.rules["Disallow"].append("/javascript")
+    spider.extractor.robots.rules["Disallow"].append("\S+.cbv")
+    spider.extractor.robots.rules["Disallow"].append("\S+2014")
     spider.start_crawling()
     
 if __name__ == '__main__':

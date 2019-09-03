@@ -1,12 +1,18 @@
 from bs4 import BeautifulSoup
 import globvar
+import utility
+import sys
+sys.path.append("/crawler")
+import robot
 
 class Urls:
-    def __init__(self):
+    def __init__(self, fld):
+        self.robots = robot.Robots()
         self.urls = set()
         self.emails = set()
         self.crawled_urls = set()
-        # TODO: Maybe store fld here, so you don't have to pass it in extract_urls
+        self.new_fld = set()
+        self.fld = fld
     
     def get_url(self):
         url = self.urls.pop()
@@ -29,22 +35,27 @@ class Urls:
         elif type(urls) == str:
             self.urls.add(urls)
 
-    def extract_urls(self, text, fld):
+    def extract_urls(self, text):
         soup = BeautifulSoup(text, 'html.parser')
         urls = [link.get('href') for link in soup.find_all('a', href=True)]
         for url in urls:
             if url.startswith('mailto:'):
                 self.add_emails(url[7:])
                 continue
-
-            if url.startswith('http') is False:
-                url = url if url.startswith('/') else f'/{url}'
-                url = f'{globvar.scheme}{fld}{url}'
-                if url not in self.crawled_urls:
-                    print(url)
-                    self.add_urls(url)
+            
+            if url.startswith('http'):
+                fld = utility.get_fld(url)
+                if self.fld == fld:
+                    if url not in self.crawled_urls and self.robots.can_crawl_url(url):
+                        print(url)
+                        self.add_urls(url)
+                else:
+                    self.new_fld.add(fld)
+                    print(f'found new fld: {fld} | {len(self.new_fld)}')
             else:
-                if url not in self.crawled_urls:
+                url = url if url.startswith('/') else f'/{url}'
+                url = f'{globvar.scheme}{self.fld}{url}'
+                if url not in self.crawled_urls and self.robots.can_crawl_url(url):
                     print(url)
                     self.add_urls(url)
     

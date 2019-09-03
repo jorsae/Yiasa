@@ -15,8 +15,7 @@ class Crawler:
         self.scheme = 'https://'
         self.fld = fld
         self.id = uuid.uuid4().hex
-        self.robots = robot.Robots()
-        self.urls = extractor.Urls()
+        self.extractor = extractor.Urls(self.fld)
         self.allow_redirects = True
         self.crawl_counter = 0
     
@@ -25,19 +24,21 @@ class Crawler:
         self.parse_robots()
         result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
         print(result)
-        print(self.robots)
-        self.urls.extract_urls(result.text, self.fld)
+        print(self.extractor.robots)
+        self.extractor.extract_urls(result.text)
         self.crawl()
     
     def crawl(self):
-        while len(self.urls.urls) > 0:
-            url = self.urls.get_url()
+        print(self.extractor.urls)
+        while len(self.extractor.urls) > 0:
+            url = self.extractor.get_url()
             logging.info(f'{self.id} | Crawling: {url}')
             req = request.get_request(url, redirects=self.allow_redirects)
-            self.urls.extract_urls(req.text, self.fld)
+            self.extractor.extract_urls(req.text)
             self.crawl_counter += 1
-            print(f'crawled: {self.crawl_counter} | queue: {len(self.urls.urls)}')
+            print(f'crawled: {self.crawl_counter} | queue: {len(self.extractor.urls)}')
         logging.info(f'{self.id}: Finished crawling {self.fld} with: {self.crawl_counter} crawled urls!')
+        print(self.extractor.crawled_urls)
             
 
     def parse_robots(self):
@@ -46,7 +47,7 @@ class Crawler:
         try:
             req = request.get_request(url)
             if req.status_code != 404:
-                self.robots.parse_robots(req.text)
+                self.extractor.robots.parse_robots(req.text)
         except:
             logging.error(f'Something went wrong parsing robots.txt url: {url}')
 
