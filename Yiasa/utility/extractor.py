@@ -5,7 +5,7 @@ import sys
 sys.path.append("/crawler")
 import robot
 
-class Urls:
+class Extractor:
     def __init__(self, fld):
         self.robots = robot.Robots()
         self.urls = set()

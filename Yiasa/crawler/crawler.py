@@ -15,7 +15,7 @@ class Crawler:
         self.scheme = 'https://'
         self.fld = fld
         self.id = uuid.uuid4().hex
-        self.extractor = extractor.Urls(self.fld)
+        self.extractor = extractor.Extractor(self.fld)
         self.allow_redirects = True
         self.crawl_counter = 0
     
