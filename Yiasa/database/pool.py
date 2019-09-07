@@ -14,6 +14,7 @@ class Pool(queue.PriorityQueue):
         print('init db')
     
     def put(self, item):
+        # Do I make item, into query + parameters?
         queue.PriorityQueue.put(self, item)
         self.start_process()
     
