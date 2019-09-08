@@ -11,7 +11,6 @@ class Pool(queue.PriorityQueue):
         self.thread = None
         self.processing = False
         self.database = database.Database(db_file)
-        print('init db')
     
     def put(self, item):
         queue.PriorityQueue.put(self, item)

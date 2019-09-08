@@ -27,8 +27,8 @@ class Crawler:
         logging.info(f'{self.id}: Starting crawling on {self.scheme}{self.fld}')
         self.parse_robots()
         result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
-        print(result)
-        print(self.extractor.robots)
+        print(f'result: {result}')
+        print(f'extractor: {self.extractor.robots}')
         
         self.pool.put(PoolQuery(1, query.insert_table_domain, (self.scheme, 1, self.creation_date)))
 
@@ -36,15 +36,13 @@ class Crawler:
         self.crawl()
     
     def crawl(self):
-        print(self.extractor.urls)
         while len(self.extractor.urls) > 0:
-
             url = self.extractor.get_url()
             logging.info(f'{self.id} | Crawling: {url}')
             req = request.get_request(url, redirects=self.allow_redirects)
             self.extractor.extract_urls(req.text)
             self.crawl_counter += 1
-            print(f'crawled: {self.crawl_counter} | queue: {len(self.extractor.urls)}')
+            print(f'id: {self.id} | crawled: {self.crawl_counter} | queue: {len(self.extractor.urls)}')
         logging.info(f'{self.id}: Finished crawling {self.fld} with: {self.crawl_counter} crawled urls!')
         print(self.extractor.crawled_urls)
             

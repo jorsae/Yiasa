@@ -47,16 +47,13 @@ class Extractor:
                 fld = utility.get_fld(url)
                 if self.fld == fld:
                     if url not in self.crawled_urls and self.robots.can_crawl_url(url):
-                        print(url)
                         self.add_urls(url)
                 else:
                     self.new_fld.add(fld)
-                    print(f'found new fld: {fld} | {len(self.new_fld)}')
             else:
                 url = url if url.startswith('/') else f'/{url}'
                 url = f'{globvar.scheme}{self.fld}{url}'
                 if url not in self.crawled_urls and self.robots.can_crawl_url(url):
-                    print(url)
                     self.add_urls(url)
     
     def __str__(self):

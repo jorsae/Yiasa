@@ -25,7 +25,6 @@ def test_full_fld_crawl():
     fld = utility.get_fld(url)
     p = pool.Pool('main.sql')
     setup_db = p.database.setup_database()
-    print(setup_db)
     spider = crawler.Crawler(fld, p)
     spider.extractor.robots.rules["Disallow"].append("\S+/Partier/\S+")
     spider.extractor.robots.rules["Disallow"].append("/\S+.html")
@@ -33,6 +32,7 @@ def test_full_fld_crawl():
     spider.extractor.robots.rules["Disallow"].append("\S+.cbv")
     spider.extractor.robots.rules["Disallow"].append("\S+2014")
     spider.extractor.robots.rules["Disallow"].append("\S+beta")
+    print('Starting crawling')
     spider.start_crawling()
 
 

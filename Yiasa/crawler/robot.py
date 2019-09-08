@@ -35,7 +35,6 @@ class Robots:
     def can_crawl_url(self, url):
         for disallow in self.rules['Disallow']:
             if re.search(disallow, url, re.IGNORECASE):
-                print(disallow)
                 return False
         return True
     
