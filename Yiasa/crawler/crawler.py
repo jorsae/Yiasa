@@ -4,14 +4,18 @@ import sys
 import logging
 sys.path.append('web/')
 sys.path.append('utility/')
+sys.path.append('database/')
 import globvar
 import request
 import robot
 import extractor
+from pq import PoolQuery
+import query
 
 class Crawler:
-    def __init__(self, fld):
+    def __init__(self, fld, pool):
         self.creation_date = datetime.now()
+        self.pool = pool
         self.scheme = 'https://'
         self.fld = fld
         self.id = uuid.uuid4().hex
@@ -25,12 +29,16 @@ class Crawler:
         result = request.get_request(f'{self.scheme}{self.fld}', redirects=self.allow_redirects)
         print(result)
         print(self.extractor.robots)
+        
+        self.pool.put(PoolQuery(1, query.insert_table_domain, (self.scheme, 1, self.creation_date)))
+
         self.extractor.extract_urls(result.text)
         self.crawl()
     
     def crawl(self):
         print(self.extractor.urls)
         while len(self.extractor.urls) > 0:
+
             url = self.extractor.get_url()
             logging.info(f'{self.id} | Crawling: {url}')
             req = request.get_request(url, redirects=self.allow_redirects)

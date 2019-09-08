@@ -14,7 +14,6 @@ class Pool(queue.PriorityQueue):
         print('init db')
     
     def put(self, item):
-        # Do I make item, into query + parameters?
         queue.PriorityQueue.put(self, item)
         self.start_process()
     
@@ -40,7 +39,7 @@ class Pool(queue.PriorityQueue):
         while not queue.PriorityQueue.empty(self):
             poolQuery = queue.PriorityQueue.get(self)
             #print(f'Processing: {poolQuery}')
-            self.database.query(poolQuery.query)
+            self.database.query(poolQuery.query, poolQuery.parameters)
         self.processing = False
         print(f'queue empty: {queue.PriorityQueue.empty(self)}')
     

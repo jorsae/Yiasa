@@ -8,6 +8,8 @@ TABLE_EMAILS = 'emails'
 def table_exists():
     return """SELECT name from sqlite_master WHERE type='table' and name=? """
 
+insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?)'
+
 def create_table_domain():
     return f"""CREATE TABLE {TABLE_DOMAIN} (
                 scheme text,

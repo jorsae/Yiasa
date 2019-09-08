@@ -23,16 +23,16 @@ def test_full_fld_crawl():
     
     url = 'jensenfilene.net'
     fld = utility.get_fld(url)
-    print(crawler)
     p = pool.Pool('main.sql')
     setup_db = p.database.setup_database()
     print(setup_db)
-    spider = crawler.Crawler(fld)
+    spider = crawler.Crawler(fld, p)
     spider.extractor.robots.rules["Disallow"].append("\S+/Partier/\S+")
     spider.extractor.robots.rules["Disallow"].append("/\S+.html")
     spider.extractor.robots.rules["Disallow"].append("/javascript")
     spider.extractor.robots.rules["Disallow"].append("\S+.cbv")
     spider.extractor.robots.rules["Disallow"].append("\S+2014")
+    spider.extractor.robots.rules["Disallow"].append("\S+beta")
     spider.start_crawling()
 
 

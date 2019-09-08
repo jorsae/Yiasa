@@ -1,7 +1,8 @@
 class PoolQuery():
-    def __init__(self, priority, query):
+    def __init__(self, priority, query, parameters):
         self.priority = priority
         self.query = query
+        self.parameters = parameters
     
     def __str__(self):
         return f'{self.priority}: {self.query}'
