@@ -27,16 +27,18 @@ class Extractor:
 
     def add_new_fld(self, fld):
         if fld == self.fld:
-            return
+            return True
         if fld not in self.new_fld:
             self.pool.put(PoolQuery(1, query.insert_table_crawl_queue, (fld, 1, datetime.now())))
             self.new_fld.add(fld)
+            return False
 
     def check_url(self, url):
         if url.startswith('http'):
             fld = utility.get_fld(url)
-            self.add_new_fld(fld)
-            self.add_url(url)
+            same_fld = self.add_new_fld(fld)
+            if same_fld:
+                self.add_url(url)
         else:
             url = url if url.startswith('/') else f'/{url}'
             url = f'{globvar.scheme}{self.fld}{url}'

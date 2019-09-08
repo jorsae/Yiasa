@@ -11,6 +11,7 @@ class Pool(queue.PriorityQueue):
         self.thread = None
         self.processing = False
         self.database = database.Database(db_file)
+        self.disable_processing = False
     
     def put(self, item):
         queue.PriorityQueue.put(self, item)
@@ -22,6 +23,8 @@ class Pool(queue.PriorityQueue):
         return queue.PriorityQueue.get(self)
 
     def start_process(self):
+        if self.disable_processing:
+            return
         if queue.PriorityQueue.empty(self):
             self.thread.join()
             self.thread = None
