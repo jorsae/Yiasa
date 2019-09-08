@@ -22,39 +22,45 @@ class Extractor:
     def get_url(self):
         url = self.urls.pop()
         self.crawled_urls.add(url)
+        # TODO: Add crawled_url to table 'crawl_history'
         return url
 
     def add_new_fld(self, fld):
+        if fld == self.fld:
+            return
         if fld not in self.new_fld:
             self.pool.put(PoolQuery(1, query.insert_table_crawl_queue, (fld, 1, datetime.now())))
             self.new_fld.add(fld)
 
-    def add_urls(self, urls):
-        if type(urls) == set:
-            self.urls = self.urls.union(urls)
-        elif type(urls) == str:
-            self.urls.add(urls)
+    def check_url(self, url):
+        if url.startswith('http'):
+            fld = utility.get_fld(url)
+            self.add_new_fld(fld)
+            self.add_url(url)
+        else:
+            url = url if url.startswith('/') else f'/{url}'
+            url = f'{globvar.scheme}{self.fld}{url}'
+            self.add_url(url)
+    
+    def add_url(self, url):
+        if url not in self.crawled_urls and self.robots.can_crawl_url(url):
+            # TODO: Add to pool
+            self.urls.add(url)
+    
+    def add_email(self, email):
+        if email not in self.emails:
+            self.emails.add(email)
+            # TODO: put to pool queue
 
     def extract_urls(self, text):
         soup = BeautifulSoup(text, 'html.parser')
         urls = [link.get('href') for link in soup.find_all('a', href=True)]
         for url in urls:
             if url.startswith('mailto:'):
-                self.add_emails(url[7:])
+                self.add_email(url[7:])
                 continue
             
-            if url.startswith('http'):
-                fld = utility.get_fld(url)
-                if fld == self.fld:
-                    if url not in self.crawled_urls and self.robots.can_crawl_url(url):
-                        self.add_urls(url)
-                else:
-                    self.add_new_fld(fld)
-            else:
-                url = url if url.startswith('/') else f'/{url}'
-                url = f'{globvar.scheme}{self.fld}{url}'
-                if url not in self.crawled_urls and self.robots.can_crawl_url(url):
-                    self.add_urls(url)
+            self.check_url(url)
     
     def __str__(self):
         return f'urls: {len(self.urls)}, emails: {len(self.emails)}'

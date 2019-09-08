@@ -40,7 +40,5 @@ def test_full_fld_crawl():
     print('Starting crawling')
     spider.start_crawling()
 
-
-
 if __name__ == '__main__':
     main()
