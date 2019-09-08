@@ -11,11 +11,17 @@ import request
 import extractor
 import logging
 import pool
+import query
 
+p = pool.Pool('main.sql')
 
 def main():
     utility.setup_logging()
-    test_full_fld_crawl()
+    dump()
+    #test_full_fld_crawl()
+
+def dump():
+    p.database.dump_database()
 
 def test_full_fld_crawl():
     """ This is just a short website, that my bot can crawl through it's entirety fast,
@@ -23,7 +29,6 @@ def test_full_fld_crawl():
     
     url = 'jensenfilene.net'
     fld = utility.get_fld(url)
-    p = pool.Pool('main.sql')
     setup_db = p.database.setup_database()
     spider = crawler.Crawler(fld, p)
     spider.extractor.robots.rules["Disallow"].append("\S+/Partier/\S+")

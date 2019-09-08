@@ -44,6 +44,7 @@ class Database():
             if param is None:
                 cursor.execute(query)
             else:
+                print(f'query_get() WITH PARAM |||| {query} | {param}')
                 cursor.execute(query, param)
             return cursor.fetchall()
         except Exception as e:
@@ -86,3 +87,23 @@ class Database():
         else:
             logging.critical(f"setup database failed at '{table_name}'")
             return None
+    
+    def dump_database(self):
+        self.dump_table(query.TABLE_DOMAIN)
+        self.dump_table(query.TABLE_CRAWL_HISTORY)
+        self.dump_table(query.TABLE_CRAWL_QUEUE)
+        self.dump_table(query.TABLE_EMAILS)
+
+    def dump_table(self, table):
+        try:
+            c = self.connection.cursor()
+            print(f'===== {table} =====')
+            rows = c.execute(f'SELECT * FROM {table}')
+            description = "("
+            for desc in c.description:
+                description += '%s, ' % desc[0]
+            print('%s)' % description[:len(description) - 2])
+            for row in rows:
+                print(row)
+        except Exception as e:
+            pass
