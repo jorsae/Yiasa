@@ -65,20 +65,20 @@ class Database():
 
     def setup_database(self):
         logging.info('Tries to setup database')
-        if self.setup_table(query.create_table_domain(), (query.TABLE_DOMAIN, )) is not True:
+        if self.setup_table(query.create_table_domain, (query.TABLE_DOMAIN, )) is not True:
             return False
-        if self.setup_table(query.create_table_crawl_history(), (query.TABLE_CRAWL_HISTORY, )) is not True:
+        if self.setup_table(query.create_table_crawl_history, (query.TABLE_CRAWL_HISTORY, )) is not True:
             return False
-        if self.setup_table(query.create_table_crawl_queue(), (query.TABLE_CRAWL_QUEUE, )) is not True:
+        if self.setup_table(query.create_table_crawl_queue, (query.TABLE_CRAWL_QUEUE, )) is not True:
             return False
-        if self.setup_table(query.create_table_emails(), (query.TABLE_EMAILS, )) is not True:
+        if self.setup_table(query.create_table_emails, (query.TABLE_EMAILS, )) is not True:
             return False
         
         logging.info('Database was set up correctly')
         return True
     
     def setup_table(self, create_query, table_name):
-        table_exists = self.query_exists(query.table_exists(), table_name)
+        table_exists = self.query_exists(query.table_exists, table_name)
         if table_exists:
             return True
         elif table_exists is False:
