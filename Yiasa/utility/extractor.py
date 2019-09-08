@@ -1,34 +1,34 @@
+from datetime import datetime
 from bs4 import BeautifulSoup
 import globvar
 import utility
 import sys
 sys.path.append("/crawler")
+sys.path.append("/database")
 import robot
+import query
+from pq import PoolQuery
 
 class Extractor:
-    def __init__(self, fld):
+    def __init__(self, fld, pool):
         self.robots = robot.Robots()
         self.urls = set()
         self.emails = set()
         self.crawled_urls = set()
         self.new_fld = set()
         self.fld = fld
+        self.pool = pool
     
     def get_url(self):
         url = self.urls.pop()
         self.crawled_urls.add(url)
         return url
 
-    def add_data(self, urls, emails):
-        self.add_urls(urls)
-        self.add_emails(emails)
+    def add_new_fld(self, fld):
+        if fld not in self.new_fld:
+            self.pool.put(PoolQuery(1, query.insert_table_crawl_queue, (fld, 1, datetime.now())))
+            self.new_fld.add(fld)
 
-    def add_emails(self, emails):
-        if type(emails) == set:
-            self.emails = self.emails.union(emails)
-        elif type(emails) == str:
-            self.emails.add(emails)
-    
     def add_urls(self, urls):
         if type(urls) == set:
             self.urls = self.urls.union(urls)
@@ -45,11 +45,11 @@ class Extractor:
             
             if url.startswith('http'):
                 fld = utility.get_fld(url)
-                if self.fld == fld:
+                if fld == self.fld:
                     if url not in self.crawled_urls and self.robots.can_crawl_url(url):
                         self.add_urls(url)
                 else:
-                    self.new_fld.add(fld)
+                    self.add_new_fld(fld)
             else:
                 url = url if url.startswith('/') else f'/{url}'
                 url = f'{globvar.scheme}{self.fld}{url}'
