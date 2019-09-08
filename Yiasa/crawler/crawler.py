@@ -30,7 +30,7 @@ class Crawler:
         print(f'result: {result}')
         print(f'extractor: {self.extractor.robots}')
         
-        self.pool.put(PoolQuery(1, query.insert_table_domain, (self.scheme, 1, self.creation_date)))
+        self.pool.put(PoolQuery(1, query.insert_table_domain, (self.scheme, self.fld, 1, self.creation_date)))
 
         self.extractor.extract_urls(result.text)
         self.crawl()
