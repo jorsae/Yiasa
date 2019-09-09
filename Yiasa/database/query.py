@@ -16,7 +16,8 @@ create_table_domain = f"""CREATE TABLE {TABLE_DOMAIN} (
                 scheme text,
                 FLD text,
                 amount_crawled int,
-                last_crawled date
+                last_crawled date,
+                PRIMARY KEY(FLD)
     )"""
 
 create_table_crawl_history = f"""CREATE TABLE {TABLE_CRAWL_HISTORY} (
@@ -33,7 +34,8 @@ create_table_crawl_history = f"""CREATE TABLE {TABLE_CRAWL_HISTORY} (
 create_table_crawl_queue = f"""CREATE TABLE {TABLE_CRAWL_QUEUE} (
                 domain text,
                 priority int,
-                date_added date
+                date_added date,
+                PRIMARY KEY(domain)
     )"""
 
 create_table_emails = f"""CREATE TABLE {TABLE_EMAILS} (

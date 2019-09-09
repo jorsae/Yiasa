@@ -18,7 +18,7 @@ p = pool.Pool('main.sql')
 def main():
     utility.setup_logging()
     dump()
-    #test_full_fld_crawl()
+    test_full_fld_crawl()
 
 def dump():
     p.database.dump_database()
