@@ -21,7 +21,7 @@ class Crawler:
         self.rowid = None
         self.thread_id = uuid.uuid4().hex
         self.extractor = extractor.Extractor(self.fld, self.pool)
-        self.allow_redirects = True
+        self.allow_redirects = False
         self.crawl_counter = 0
     
     def start_crawling(self):
