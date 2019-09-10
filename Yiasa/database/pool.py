@@ -43,7 +43,6 @@ class Pool(queue.PriorityQueue):
             #print(f'Processing: {poolQuery}')
             self.database.query(poolQuery.query, poolQuery.parameters)
         self.processing = False
-        print(f'queue empty: {queue.PriorityQueue.empty(self)}')
     
     def empty(self):
         return queue.PriorityQueue.empty(self)

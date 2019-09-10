@@ -13,3 +13,8 @@ def setup_logging():
 def get_fld(url):
     """ gets first level domain from a url """
     return url.split("//")[-1].split("/")[0].split('?')[0]
+
+def same_fld(fld1, fld2):
+    fld1 = fld1.replace('www.', '')
+    fld2 = fld2.replace('www.', '')
+    return fld1 == fld2

@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 
 class RequestResult(object):
-    def __init__(self, url, text, elapsed_time, status_code, date, content_type, content_length):
+    def __init__(self, url, text, elapsed_time, status_code, date, content_type, content_length, new_location):
         self.FLD_Id = None
         self.URLS_Id = None
         self.url = url
@@ -12,12 +12,16 @@ class RequestResult(object):
         self.date = date
         self.content_type = content_type
         self.content_length = content_length
+        self.new_location = new_location
     
     @classmethod
     def by_request(cls, request, date):
         contentType = parse_headers(request.headers, 'Content-Length')
         contentLength = parse_headers(request.headers, 'Content-Type')
-        return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
+        if contentLength == None:
+            contentLength = 0
+        new_location = parse_headers(request.headers, 'Location')
+        return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength, new_location)
     
     def to_tuple(self, rowid):
         return (rowid, self.url, self.elapsed_time.microseconds, self.status_code, self.date, self.content_type, self.content_length, )
@@ -35,7 +39,10 @@ def get_request(url, timeout=3, redirects=False):
     
     contentType = parse_headers(request.headers, 'Content-Type')
     contentLength = parse_headers(request.headers, 'Content-Length')
-    return RequestResult(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
+    if contentLength == None:
+        contentLength = 0
+    new_location = parse_headers(request.headers, 'Location')
+    return RequestResult(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength, new_location)
 
 def parse_headers(headers, value):
     try:
