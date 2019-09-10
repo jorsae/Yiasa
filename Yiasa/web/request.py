@@ -11,15 +11,13 @@ class RequestResult(object):
         self.status_code = status_code
         self.date = date
         self.content_type = content_type
-        self.content_length = content_length
+        self.content_length = content_length if content_length != None else 0
         self.new_location = new_location
     
     @classmethod
     def by_request(cls, request, date):
         contentType = parse_headers(request.headers, 'Content-Length')
         contentLength = parse_headers(request.headers, 'Content-Type')
-        if contentLength == None:
-            contentLength = 0
         new_location = parse_headers(request.headers, 'Location')
         return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength, new_location)
     
@@ -39,8 +37,6 @@ def get_request(url, timeout=3, redirects=False):
     
     contentType = parse_headers(request.headers, 'Content-Type')
     contentLength = parse_headers(request.headers, 'Content-Length')
-    if contentLength == None:
-        contentLength = 0
     new_location = parse_headers(request.headers, 'Location')
     return RequestResult(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength, new_location)
 
