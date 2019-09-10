@@ -11,7 +11,7 @@ class RequestResult(object):
         self.status_code = status_code
         self.date = date
         self.content_type = content_type
-        self.content_length = content_length if content_length != None else 0
+        self.content_length = 0 if content_length == None else content_length
         self.new_location = new_location
     
     @classmethod
