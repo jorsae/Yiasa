@@ -25,7 +25,7 @@ class Database():
         #self.connection.execute('pragma journal_mode=WAL')
 
     def query(self, query, param=None):
-        logging.info(f'{query} | {param}')
+        logging.info(f'query: {query} | {param}')
         try:
             if param is None:
                 self.connection.execute(query)
@@ -38,13 +38,12 @@ class Database():
             return False
 
     def query_get(self, query, param=None):
-        logging.info(f'{query} | {param}')
+        logging.info(f'query_get: {query} | {param}')
         try:
             cursor = self.connection.cursor()
             if param is None:
                 cursor.execute(query)
             else:
-                print(f'query_get() WITH PARAM |||| {query} | {param}')
                 cursor.execute(query, param)
             return cursor.fetchall()
         except Exception as e:
@@ -52,7 +51,7 @@ class Database():
             return None
     
     def query_exists(self, query, param=None):
-        logging.info(f'{query} | {param}')
+        logging.info(f'query_exists: {query} | {param}')
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, param)
