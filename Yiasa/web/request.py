@@ -18,9 +18,12 @@ class RequestResult(object):
         contentType = parse_headers(request.headers, 'Content-Length')
         contentLength = parse_headers(request.headers, 'Content-Type')
         return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength)
+    
+    def to_tuple(self, rowid):
+        return (rowid, self.url, self.elapsed_time.microseconds, self.status_code, self.date, self.content_type, self.content_length, )
 
     def __str__(self):
-        return f'{self.url} {self.date} {self.elapsed_time} | {self.status_code} {self.content_type} {self.content_length}'
+        return f'{self.url} {self.date} {self.elapsed_time.microseconds} | {self.status_code} {self.content_type} {self.content_length}'
 
 def get_request(url, timeout=3, redirects=False):
     try:

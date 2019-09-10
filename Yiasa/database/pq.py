@@ -1,7 +1,7 @@
 class PoolQuery():
-    def __init__(self, priority, query, parameters=None):
-        self.priority = priority
+    def __init__(self, query, parameters=None, priority=100):
         self.query = query
+        self.priority = priority
         self.parameters = parameters
     
     def __str__(self):

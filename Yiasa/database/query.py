@@ -1,15 +1,18 @@
 # Database TABLE NAMES
 TABLE_DOMAIN = 'domain'
-TABLE_CRAWL_HISTORY = 'crawl_history'
 TABLE_CRAWL_QUEUE = 'crawl_queue'
+TABLE_CRAWL_HISTORY = 'crawl_history'
 TABLE_EMAILS = 'emails'
 
-# Generel queries
+# General queries
 table_exists = """SELECT name from sqlite_master WHERE type='table' and name=? """
+
+get_id_domain = f'SELECT rowid from {TABLE_DOMAIN} where FLD = ?'
 
 # Insert queries
 insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?, ?)'
 insert_table_crawl_queue = f'INSERT INTO {TABLE_CRAWL_QUEUE} VALUES (?, ?, ?)'
+insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?)'
 
 # Create queries
 create_table_domain = f"""CREATE TABLE {TABLE_DOMAIN} (

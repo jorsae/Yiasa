@@ -29,7 +29,7 @@ class Extractor:
         if fld == self.fld:
             return True
         if fld not in self.new_fld:
-            self.pool.put(PoolQuery(1, query.insert_table_crawl_queue, (fld, 1, datetime.now())))
+            self.pool.put(PoolQuery(query.insert_table_crawl_queue, (fld, 1, datetime.now())))
             self.new_fld.add(fld)
             return False
 
