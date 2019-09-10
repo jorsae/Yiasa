@@ -17,7 +17,6 @@ class Crawler:
     def __init__(self, fld, pool):
         self.creation_date = datetime.now()
         self.pool = pool
-        self.scheme = 'https://'
         self.fld = fld
         self.rowid = None
         self.thread_id = uuid.uuid4().hex
@@ -26,9 +25,10 @@ class Crawler:
         self.crawl_counter = 0
     
     def start_crawling(self):
-        logging.info(f'{self.thread_id}: Starting crawling on {self.scheme}{self.fld}')
+        url = f'{globvar.scheme}{self.fld}'
+        logging.info(f'{self.thread_id}: Starting crawling on {url}')
 
-        self.pool.put(PoolQuery(query.insert_table_domain, (self.scheme, self.fld, 1, self.creation_date), priority=1))
+        self.pool.put(PoolQuery(query.insert_table_domain, (globvar.scheme, self.fld, 1, self.creation_date), priority=1))
         rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
         while rowid == []:
             rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
@@ -37,9 +37,9 @@ class Crawler:
 
         self.parse_robots()
 
-        req = self.send_request(f'{self.scheme}{self.fld}')
+        req = self.send_request(url)
         if req == None:
-            logging.info(f'{self.thread_id}: {self.scheme}{self.fld} could not be crawled. Stopping crawler...')
+            logging.info(f'{self.thread_id}: {url} could not be crawled. Stopping crawler...')
             return
 
         self.extractor.extract_urls(req.text)
