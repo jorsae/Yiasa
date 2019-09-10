@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+import time
 import sys
 import logging
 sys.path.append('web/')
@@ -45,7 +46,7 @@ class Crawler:
         self.extractor.extract_urls(req.text)
         self.crawl()
     
-    def send_request(self, url, depth=2):
+    def send_request(self, url, depth=globvar.REDIRECT_MAX_DEPTH):
         req = request.get_request(url, redirects=self.allow_redirects)
         self.pool.put(PoolQuery(query.insert_table_crawl_history, req.to_tuple(self.rowid)))
         i = 0
