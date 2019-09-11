@@ -22,9 +22,9 @@ def test_pool_priority_queue():
     queue = pool.Pool()
     queue.processing = True # disables processing of data
 
-    expected = PoolQuery(-1, 'test3')
-    queue.put(PoolQuery(100, 'test1'))
+    expected = PoolQuery('test3', priority=-1)
+    queue.put(PoolQuery('test1'))
     queue.put(expected)
-    queue.put(PoolQuery(100, 'test2'))
+    queue.put(PoolQuery('test2'))
 
     assert(queue.get()) == expected

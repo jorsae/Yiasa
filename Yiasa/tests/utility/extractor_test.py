@@ -24,8 +24,8 @@ def read_file(request):
     p.database.setup_database()
     p.disable_processing = True
     urls = {'https://fld.com/arg',
-                'http://fld.com/pancake/wut',
-                'https://fld.com/pancake/wut'
+                'https://fld.com/monster/depth',
+                'https://fld.com/robot/wut'
                 }
     with open('tests/utility/extractor_test_website.html') as f:
         data = f.read()
