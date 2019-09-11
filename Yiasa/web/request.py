@@ -26,7 +26,7 @@ class RequestResult(object):
         return cls(request.url, request.text, request.elapsed, request.status_code, datetime.now(), contentType, contentLength, new_location)
     
     def to_tuple(self, rowid):
-        return (rowid, self.url, self.elapsed_time.microseconds, self.status_code, self.date, self.content_type, self.content_length, )
+        return (rowid, self.url, self.elapsed_time.microseconds, self.status_code, self.date, self.content_type, self.content_length, self.new_location)
 
     def __str__(self):
         return f'{self.url} {self.date} {self.elapsed_time.microseconds} | {self.status_code} {self.content_type} {self.content_length}'

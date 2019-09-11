@@ -19,9 +19,9 @@ p = pool.Pool('main.sql')
 
 def main():
     utility.setup_logging()
-    # dump()
-    test_full_fld_crawl()
-    #multi_thread()
+    dump()
+    # test_full_fld_crawl()
+    # multi_thread()
 
 def multi_thread():
     t1 = threading.Thread(target=test_full_fld_crawl)

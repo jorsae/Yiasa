@@ -12,7 +12,7 @@ get_id_domain = f'SELECT rowid from {TABLE_DOMAIN} where FLD = ?'
 # Insert queries
 insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?, ?)'
 insert_table_crawl_queue = f'INSERT INTO {TABLE_CRAWL_QUEUE} VALUES (?, ?, ?)'
-insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?)'
+insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 
 # Create queries
 create_table_domain = f"""CREATE TABLE {TABLE_DOMAIN} (
@@ -31,6 +31,7 @@ create_table_crawl_history = f"""CREATE TABLE {TABLE_CRAWL_HISTORY} (
                 crawled_date date,
                 content_type text,
                 content_length int,
+                new_location text,
                 FOREIGN KEY ({TABLE_DOMAIN}_id) REFERENCES {TABLE_DOMAIN}(rowid)
     )"""
 
