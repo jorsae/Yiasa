@@ -21,9 +21,9 @@ p = pool.Pool('main.sql')
 
 def main():
     utility.setup_logging()
-    p.database.setup_database()
+    # p.database.setup_database()
     dump()
-    # test_full_fld_crawl()
+    test_full_fld_crawl()
     # multi_thread()
 
 def multi_thread():

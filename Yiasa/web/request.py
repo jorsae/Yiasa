@@ -31,7 +31,7 @@ class RequestResult(object):
     def __str__(self):
         return f'{self.url} {self.date} {self.elapsed_time.microseconds} | {self.status_code} {self.content_type} {self.content_length}'
 
-def get_request(url, timeout=globvar.timeout, redirects=False):
+def get_request(url, timeout=globvar.timeout, redirects=globvar.ALLOW_REDIRECTS):
     try:
         request = requests.get(url, timeout=timeout, allow_redirects=redirects)
     except requests.exceptions.Timeout as tout:

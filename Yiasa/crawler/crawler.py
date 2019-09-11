@@ -22,7 +22,6 @@ class Crawler:
         self.rowid = None
         self.thread_id = uuid.uuid4().hex
         self.extractor = extractor.Extractor(self.fld, self.pool)
-        self.allow_redirects = False
         self.crawl_counter = 0
     
     def add_to_domain_database(self):
@@ -54,12 +53,12 @@ class Crawler:
         self.crawl()
     
     def send_request(self, url, depth=globvar.REDIRECT_MAX_DEPTH):
-        req = request.get_request(url, redirects=self.allow_redirects)
+        req = request.get_request(url, redirects=globvar.ALLOW_REDIRECTS)
         self.pool.put(PoolQuery(query.insert_table_crawl_history, req.to_tuple(self.rowid)))
         i = 0
         while (300 <= req.status_code < 400) and i <= depth:
             if utility.same_fld(utility.get_fld(req.new_location), self.fld):
-                req = request.get_request(req.new_location, redirects=self.allow_redirects)
+                req = request.get_request(req.new_location, redirects=globvar.ALLOW_REDIRECTS)
                 self.pool.put(PoolQuery(query.insert_table_crawl_history, req.to_tuple(self.rowid)))
             else:
                 # TODO: Log error message here.
