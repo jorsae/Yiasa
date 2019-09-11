@@ -13,6 +13,9 @@ get_id_domain = f'SELECT rowid from {TABLE_DOMAIN} where FLD = ?'
 insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?, ?, ?)'
 insert_table_crawl_queue = f'INSERT INTO {TABLE_CRAWL_QUEUE} VALUES (?, ?, ?)'
 insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+insert_table_emails = f'INSERT INTO {TABLE_EMAILS} VALUES (?, ?, ?)'
+insert_table_emails_with_fld = f"""INSERT INTO {TABLE_EMAILS}
+                                    VALUES (SELECT rowid FROM {TABLE_DOMAIN} WHERE FLD = ?), ?, ?)"""
 
 # Update queries
 update_table_domain = f'UPDATE {TABLE_DOMAIN} SET amount_crawled = amount_crawled + 1, last_crawled = ? WHERE rowid = ?'
@@ -47,7 +50,8 @@ create_table_crawl_queue = f"""CREATE TABLE {TABLE_CRAWL_QUEUE} (
     )"""
 
 create_table_emails = f"""CREATE TABLE {TABLE_EMAILS} (
-                {TABLE_CRAWL_HISTORY}_id int,
-                email text
-                email_added date
+                {TABLE_DOMAIN}_id int,
+                email text,
+                email_added date,
+                FOREIGN KEY ({TABLE_DOMAIN}_id) REFERENCES {TABLE_DOMAIN}(rowid)
     )"""

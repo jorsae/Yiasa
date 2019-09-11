@@ -10,13 +10,14 @@ import query
 from pq import PoolQuery
 
 class Extractor:
-    def __init__(self, fld, pool):
+    def __init__(self, fld, rowid, pool):
         self.robots = robot.Robots()
         self.urls = set()
         self.emails = set()
         self.crawled_urls = set()
         self.new_fld = set()
         self.fld = fld
+        self.rowid = rowid
         self.pool = pool
     
     def get_url(self):
@@ -52,7 +53,10 @@ class Extractor:
     def add_email(self, email):
         if email not in self.emails:
             self.emails.add(email)
-            # TODO: put to pool queue
+            if self.rowid == None:
+                self.pool.put(PoolQuery(query.insert_table_emails_with_fld, (self.fld, email, datetime.now(), )))
+            else:
+                self.pool.put(PoolQuery(query.insert_table_emails, (self.rowid, email, datetime.now(), )))
 
     def extract_urls(self, text):
         if text == None:

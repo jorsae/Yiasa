@@ -21,7 +21,7 @@ class Crawler:
         self.fld = fld
         self.rowid = None
         self.thread_id = uuid.uuid4().hex
-        self.extractor = extractor.Extractor(self.fld, self.pool)
+        self.extractor = extractor.Extractor(self.fld, None, self.pool)
         self.crawl_counter = 0
     
     def add_to_domain_database(self):
@@ -33,6 +33,7 @@ class Crawler:
             self.pool.database.query(query.insert_table_domain, (globvar.scheme, self.fld, 1, self.creation_date, self.creation_date))
             rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
         self.rowid = rowid[0][0]
+        self.extractor.rowid = self.rowid
 
         if updateRow:
             self.pool.database.query(query.update_table_domain, (self.creation_date, self.rowid))
@@ -51,6 +52,8 @@ class Crawler:
 
         self.extractor.extract_urls(req.text)
         self.crawl()
+        print(self.extractor.emails)
+        print(self.extractor)
     
     def send_request(self, url, depth=globvar.REDIRECT_MAX_DEPTH):
         req = request.get_request(url, redirects=globvar.ALLOW_REDIRECTS)
@@ -82,7 +85,6 @@ class Crawler:
             self.crawl_counter += 1
             print(f'id: {self.thread_id} | crawled: {self.crawl_counter} | queue: {len(self.extractor.urls)}')
         logging.info(f'{self.thread_id}: Finished crawling {self.fld} with: {self.crawl_counter} crawled urls!')
-        print(self.extractor.crawled_urls)
 
     def parse_robots(self):
         logging.info(f'{self.thread_id}: Parsing robots.txt')

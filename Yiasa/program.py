@@ -22,8 +22,8 @@ p = pool.Pool('main.sql')
 def main():
     utility.setup_logging()
     # p.database.setup_database()
-    dump()
-    test_full_fld_crawl()
+    # dump()
+    # test_full_fld_crawl()
     # multi_thread()
 
 def multi_thread():
@@ -59,7 +59,7 @@ def test_full_fld_crawl():
     """ This is just a short website, that my bot can crawl through it's entirety fast,
         so I can use it as test """ 
     
-    url = 'jensenfilene.net'
+    url = 'vg.no'
     fld = utility.get_fld(url)
     setup_db = p.database.setup_database()
     spider = crawler.Crawler(fld, p)

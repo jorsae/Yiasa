@@ -20,7 +20,7 @@ data = ''
 @pytest.fixture(scope='function', autouse=True)
 def read_file(request):
     global data, urls, ext
-    ext = extractor.Extractor('fld.com', p)
+    ext = extractor.Extractor('fld.com', None, p)
     p.database.setup_database()
     p.disable_processing = True
     urls = {'https://fld.com/arg',
