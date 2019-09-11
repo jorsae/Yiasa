@@ -15,7 +15,7 @@ insert_table_crawl_queue = f'INSERT INTO {TABLE_CRAWL_QUEUE} VALUES (?, ?, ?)'
 insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 insert_table_emails = f'INSERT INTO {TABLE_EMAILS} VALUES (?, ?, ?)'
 insert_table_emails_with_fld = f"""INSERT INTO {TABLE_EMAILS}
-                                    VALUES (SELECT rowid FROM {TABLE_DOMAIN} WHERE FLD = ?), ?, ?)"""
+                                    VALUES ((SELECT rowid FROM {TABLE_DOMAIN} WHERE FLD = ?), ?, ?)"""
 
 # Update queries
 update_table_domain = f'UPDATE {TABLE_DOMAIN} SET amount_crawled = amount_crawled + 1, last_crawled = ? WHERE rowid = ?'

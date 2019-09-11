@@ -22,7 +22,7 @@ p = pool.Pool('main.sql')
 def main():
     utility.setup_logging()
     # p.database.setup_database()
-    # dump()
+    dump()
     # test_full_fld_crawl()
     # multi_thread()
 
