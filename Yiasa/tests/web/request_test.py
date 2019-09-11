@@ -21,6 +21,5 @@ def test_requestresult_by_request():
 
 def test_get_request_timed_out():
     url = "http://google.com"
-    with pytest.raises(requests.exceptions.Timeout) as excinfo:
-        req = request.get_request(url, timeout=0.001)
-    excinfo.match(f'{url} timed out')
+    req = request.get_request(url, timeout=0.001)
+    assert(req.status_code) == 0

@@ -3,6 +3,7 @@ import requests
 import sys
 sys.path.append("web/")
 sys.path.append("crawler/")
+sys.path.append("utility/")
 import request
 import robot
 
