@@ -31,8 +31,12 @@ def get_request(url, timeout=3, redirects=False):
     try:
         request = requests.get(url, timeout=timeout, allow_redirects=redirects)
     except requests.exceptions.Timeout as timeout:
+        logging.warning(f'{url} timed out')
+        print(request.status_code)
+        print(request.text)
         raise requests.exceptions.Timeout(f'{url} timed out')
     except Exception as e:
+        logging.error(f'{url} Exception thrown: {e}')
         raise Exception(e)
     
     contentType = parse_headers(request.headers, 'Content-Type')

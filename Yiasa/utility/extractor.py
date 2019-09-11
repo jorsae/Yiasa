@@ -38,9 +38,6 @@ class Extractor:
             fld = utility.get_fld(url)
             same_fld = self.add_new_fld(fld)
             if same_fld:
-                if url.startswith('http://'):
-                    url = url[7:]
-                    url = f'{globvar.scheme}{url}'
                 self.add_url(url)
         else:
             url = url if url.startswith('/') else f'/{url}'
