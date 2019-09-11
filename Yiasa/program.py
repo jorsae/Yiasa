@@ -1,3 +1,4 @@
+import datetime
 import requests
 import sys
 import threading
@@ -6,6 +7,7 @@ sys.path.append('crawler/')
 sys.path.append('utility/')
 sys.path.append('web/')
 sys.path.append('database/')
+import globvar
 import crawler
 import robot
 import utility
@@ -19,6 +21,7 @@ p = pool.Pool('main.sql')
 
 def main():
     utility.setup_logging()
+    p.database.setup_database()
     dump()
     # test_full_fld_crawl()
     # multi_thread()

@@ -10,15 +10,19 @@ table_exists = """SELECT name from sqlite_master WHERE type='table' and name=? "
 get_id_domain = f'SELECT rowid from {TABLE_DOMAIN} where FLD = ?'
 
 # Insert queries
-insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?, ?)'
+insert_table_domain = f'INSERT INTO {TABLE_DOMAIN} VALUES (?, ?, ?, ?, ?)'
 insert_table_crawl_queue = f'INSERT INTO {TABLE_CRAWL_QUEUE} VALUES (?, ?, ?)'
 insert_table_crawl_history = f'INSERT INTO {TABLE_CRAWL_HISTORY} VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+
+# Update queries
+update_table_domain = f'UPDATE {TABLE_DOMAIN} SET amount_crawled = amount_crawled + 1, last_crawled = ? WHERE rowid = ?'
 
 # Create queries
 create_table_domain = f"""CREATE TABLE {TABLE_DOMAIN} (
                 scheme text,
                 FLD text,
                 amount_crawled int,
+                first_crawled date,
                 last_crawled date,
                 PRIMARY KEY(FLD)
     )"""

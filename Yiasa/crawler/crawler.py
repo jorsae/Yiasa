@@ -25,17 +25,24 @@ class Crawler:
         self.allow_redirects = False
         self.crawl_counter = 0
     
+    def add_to_domain_database(self):
+        rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
+        updateRow = True
+        # FLD does not exist in domain, insert it
+        while rowid == []:
+            updateRow = False
+            self.pool.database.query(query.insert_table_domain, (globvar.scheme, self.fld, 1, self.creation_date, self.creation_date))
+            rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
+        self.rowid = rowid[0][0]
+
+        if updateRow:
+            self.pool.database.query(query.update_table_domain, (self.creation_date, self.rowid))
+    
     def start_crawling(self):
         url = f'{globvar.scheme}{self.fld}'
         logging.info(f'{self.thread_id}: Starting crawling on {url}')
 
-        self.pool.put(PoolQuery(query.insert_table_domain, (globvar.scheme, self.fld, 1, self.creation_date), priority=1))
-        rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
-        while rowid == []:
-            rowid = self.pool.database.query_get(query.get_id_domain, (self.fld, ))
-            time.sleep(1)
-        self.rowid = rowid[0][0]
-
+        self.add_to_domain_database()
         self.parse_robots()
 
         req = self.send_request(url)
