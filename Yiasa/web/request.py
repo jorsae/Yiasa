@@ -1,5 +1,9 @@
 import requests
-from datetime import datetime
+import logging
+from datetime import datetime, timedelta
+import sys
+sys.path.append("/utility")
+import globvar
 
 class RequestResult(object):
     def __init__(self, url, text, elapsed_time, status_code, date, content_type, content_length, new_location):
@@ -27,17 +31,15 @@ class RequestResult(object):
     def __str__(self):
         return f'{self.url} {self.date} {self.elapsed_time.microseconds} | {self.status_code} {self.content_type} {self.content_length}'
 
-def get_request(url, timeout=3, redirects=False):
+def get_request(url, timeout=globvar.timeout, redirects=False):
     try:
         request = requests.get(url, timeout=timeout, allow_redirects=redirects)
-    except requests.exceptions.Timeout as timeout:
+    except requests.exceptions.Timeout as tout:
         logging.warning(f'{url} timed out')
-        print(request.status_code)
-        print(request.text)
-        raise requests.exceptions.Timeout(f'{url} timed out')
+        return RequestResult(url, None, timedelta(seconds=timeout), 0, datetime.now(), None, None, None)
     except Exception as e:
         logging.error(f'{url} Exception thrown: {e}')
-        raise Exception(e)
+        return RequestResult(url, None, timedelta(microseconds=0), 0, datetime.now(), None, None, None)
     
     contentType = parse_headers(request.headers, 'Content-Type')
     contentLength = parse_headers(request.headers, 'Content-Length')

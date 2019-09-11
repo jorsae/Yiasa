@@ -55,6 +55,9 @@ class Extractor:
             # TODO: put to pool queue
 
     def extract_urls(self, text):
+        if text == None:
+            return
+            
         soup = BeautifulSoup(text, 'html.parser')
         urls = [link.get('href') for link in soup.find_all('a', href=True)]
         for url in urls:
